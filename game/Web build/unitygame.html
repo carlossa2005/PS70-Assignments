@@ -17,7 +17,7 @@
     </style>
   </head>
   <body>
-    <a href="about.html" class="btn btn-secondary" id="return-button">Return</a>
+    <a href="./about.html" class="btn btn-secondary" id="return-button">Return</a>
     
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
@@ -65,15 +65,16 @@
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/Web build.loader.js";
       var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/Web build.data.br",
-        frameworkUrl: buildUrl + "/Web build.framework.js.br",
-        codeUrl: buildUrl + "/Web build.wasm.br",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "D_CA PRACTICE",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
+          arguments: [],
+          dataUrl: buildUrl + "/Web build.data",
+          frameworkUrl: buildUrl + "/Web build.framework.js",
+          codeUrl: buildUrl + "/Web build.wasm",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "DefaultCompany",
+          productName: "D_CA PRACTICE",
+          productVersion: "1.0",
+          showBanner: unityShowBanner,
+           
       };
 
       // By default, Unity keeps WebGL canvas render target size matched with
