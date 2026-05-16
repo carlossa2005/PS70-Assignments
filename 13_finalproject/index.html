@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <title>PS70: Intro to Digital Fabrication</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
-
+ 
 <nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
@@ -16,41 +16,42 @@
     </div>
   </div>
 </nav>
-
+ 
 <body>
 <xmp style="display:none;">
 <div class="textcontainer">
 <p class="margin"></p>
-
+ 
 <h3>Final Project: Robot Boxing</h3>
-
+ 
 I started with 4 servo motors inside of a body similar to the final body, however it was smaller and I had to iterate a bit to get the holes to be the correct size and put some guard rails to keep the servos in place. This was my MVP and I was able to plug it in and have all the servos rotate back and forth.
-
+ 
 It was suggested that I switch the wheels to stepper motors. I did and had many problems with them. I had them moving many times but I think the issue was that I was never able to supply enough power and/or the XIAO did not have enough sophisticated pins to properly run 2 four-pin stepper motors and a servo. I discarded an arm because there were not enough pins on the XIAO.
-
+ 
 ---
-
+ 
 ### Issues & How I Fixed Them (with help from Claude)
-
-**1. Output speed range was too wide**  
-The `potToSpeed()` function was originally mapping joystick inputs to a range of -100 to 100, which caused the wheels to spin too fast and made the robot hard to control. I used Claude to update the `map()` calls to output -15 to 15 instead, giving much finer control at lower speeds.
-
-**2. Wrong robot MAC address**  
-ESP-NOW requires the exact MAC address of the receiving device. My code had a placeholder MAC that didn't match the actual robot. Claude helped me reformat the MAC address `58:8C:81:AD:95:50` into the correct C++ byte array syntax: `{0x58, 0x8C, 0x81, 0xAD, 0x95, 0x50}`.
-
+ 
+**1. Output speed range was too wide**
+ 
+The potToSpeed() function was originally mapping joystick inputs to a range of -100 to 100, which caused the wheels to spin too fast and made the robot hard to control. I used Claude to update the map() calls to output -15 to 15 instead, giving much finer control at lower speeds.
+ 
+**2. Wrong robot MAC address**
+ 
+ESP-NOW requires the exact MAC address of the receiving device. My code had a placeholder MAC that didn't match the actual robot. Claude helped me reformat the MAC address 58:8C:81:AD:95:50 into the correct C++ byte array syntax: {0x58, 0x8C, 0x81, 0xAD, 0x95, 0x50}.
+ 
 ---
-
-I also had trouble finding enough power. My batteries were 9 volt, which was the largest and most powerful i could fit in my housing (after multiple iterations)
-A battery lost power and it was enough of a difference to not power the xiao anymore and only the stepper motors, so then the robot didn't recieve any input from the controller.
-
-The images below should give a good idea of how my process went. The files I used (both the 3d models and the arduino code are attached at the bottom of the page.)
-
+ 
+I also had trouble finding enough power. My batteries were 9 volt, which was the largest and most powerful I could fit in my housing (after multiple iterations). A battery lost power and it was enough of a difference to not power the XIAO anymore and only the stepper motors, so then the robot didn't receive any input from the controller.
+ 
+The images below should give a good idea of how my process went. The files I used (both the 3D models and the Arduino code are attached at the bottom of the page.)
+ 
 </xmp>
 </body>
-
+ 
 <!-- ── Media Gallery ── -->
 <div class="textcontainer" style="max-width:860px; margin:0 auto; padding:1rem;">
-
+ 
   <div style="position:relative; background:#111; border-radius:8px; overflow:hidden;">
     <div id="media-display" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative;">
       <div id="media-inner" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div>
@@ -59,14 +60,14 @@ The images below should give a good idea of how my process went. The files I use
     <button onclick="changeMedia(-1)" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); border:none; color:#fff; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:22px;">&#8249;</button>
     <button onclick="changeMedia(1)"  style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); border:none; color:#fff; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:22px;">&#8250;</button>
   </div>
-
+ 
   <div style="padding:0.75rem 1rem; border:1px solid #ddd; border-top:none; border-radius:0 0 8px 8px; background:#fff;">
     <p id="caption-text" style="margin:0; font-size:14px; color:#555; font-style:italic;"></p>
   </div>
-
+ 
   <div id="thumb-strip" style="display:flex; gap:6px; margin-top:10px; overflow-x:auto; padding-bottom:4px;"></div>
 </div>
-
+ 
 <script>
 // ── EDIT YOUR CAPTIONS HERE ──────────────────────────────────────────
 const mediaDescriptions = {
@@ -106,31 +107,31 @@ const mediaDescriptions = {
   34: "Add your description for image 34 here.",
 };
 // ────────────────────────────────────────────────────────────────────
-
+ 
 const videos  = [5, 6, 10, 23, 24, 30, 31];
 const allNums = [];
 for (let i = 1; i <= 34; i++) { if (i !== 29) allNums.push(i); }
 let current = 0;
-
+ 
 function isVideo(n) { return videos.includes(n); }
-
+ 
 function renderMedia(idx) {
   const n     = allNums[idx];
   const inner = document.getElementById('media-inner');
   inner.innerHTML = '';
   if (isVideo(n)) {
     const v = document.createElement('video');
-    v.src = n + '.mov'; v.controls = true;
+    v.src = n + '.MOV'; v.controls = true;
     v.style.cssText = 'max-width:100%; max-height:100%;';
     inner.appendChild(v);
   } else {
     const img = document.createElement('img');
-    img.src = n + '.heic'; img.alt = 'Media ' + n;
+    img.src = n + '.HEIC'; img.alt = 'Media ' + n;
     img.style.cssText = 'max-width:100%; max-height:100%; object-fit:contain;';
     inner.appendChild(img);
   }
   document.getElementById('media-counter').textContent =
-    (idx + 1) + ' / ' + allNums.length + (isVideo(n) ? '  ▶ video' : '');
+    (idx + 1) + ' / ' + allNums.length + (isVideo(n) ? '  \u25B6 video' : '');
   document.getElementById('caption-text').textContent =
     mediaDescriptions[n] || '';
   document.querySelectorAll('.thumb').forEach((t, i) => {
@@ -138,39 +139,39 @@ function renderMedia(idx) {
     t.style.opacity = i === idx ? '1' : '0.5';
   });
 }
-
+ 
 function changeMedia(dir) {
   current = (current + dir + allNums.length) % allNums.length;
   renderMedia(current);
   document.querySelectorAll('.thumb')[current]
     ?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
-
+ 
 const strip = document.getElementById('thumb-strip');
 allNums.forEach((n, i) => {
   const btn = document.createElement('button');
   btn.className = 'thumb';
-  btn.textContent = (isVideo(n) ? '▶ ' : '') + n;
+  btn.textContent = (isVideo(n) ? '\u25B6 ' : '') + n;
   btn.style.cssText =
     'flex-shrink:0; width:48px; height:36px; border:1px solid #ccc; border-radius:4px;' +
     'background:#f5f5f5; cursor:pointer; font-size:11px; color:#444;';
   btn.onclick = () => { current = i; renderMedia(i); };
   strip.appendChild(btn);
 });
-
+ 
 renderMedia(0);
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')  changeMedia(-1);
   if (e.key === 'ArrowRight') changeMedia(1);
 });
 </script>
-
+ 
 <p class="margin">   </p>
 <div class="flexrow">
   <a id="btn" href="FinalProjectFiles.zip" download>Download Files</a>
 </div>
 <p class="margin">   </p>
-
+ 
 <script src="../strapdown.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </html>
