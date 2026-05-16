@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>PS70: Intro to Digital Fabrication </title>
+<title>PS70: Intro to Digital Fabrication</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../style.css" rel="stylesheet">
 
-
-<nav class="navbar navbar-expand-sm navbar-dark" style=" color: #EEE7E8;">
+<nav class="navbar navbar-expand-sm navbar-dark" style="color: #EEE7E8;">
   <div style="align-items: center; justify-content: center;" class="container-fluid">
     <div class="flexrow">
       <h2 class="nav-title">PS70 Spring 2026</h2>
@@ -24,27 +23,154 @@
 <p class="margin"></p>
 
 <h3>Final Project: Robot Boxing</h3>
-This is not a finalized design but I have a plan.
 
-</div>
-I have the base CADed out, but I will do the robots soon. The robots will be the hard part and I want them to be remote controlled so I am waiting for the week we do RC.
-  <img src="fightArena.png" alt="Fight Arena" style = "width: 400px;" style = "height: 400px;">
-</div>
-For the robots, I want to do a simple swinging motion at the press of a button and have it return to rest position. I will also include a shield and a button to raise the shield to protect the head.
-I think I will design it so that the heads are attached with a weak magnet potentially? I want them to come off with a moderate amount of force
-I was thinking that I would try to have them move with a ball that rolls at the base and there is a square bit around them that keeps them upright. 
-This is extremely challenging, and if I am not able to get it done or find it impractical, I will make tank treads.
-My goal is to have 2 robots. They will have different faces and weapons but be the same otherwise. If I have time I will make more.
-</div>
-For materials I need 360 degree servos for the wheels, at least 8. I also need more arduinos: 4 total. to make 2 pairs that communicate.
-I need to redesign the head, the lid, and the arm. Also include a piece for the body that holds the servo's in place.
+I started with 4 servo motors inside of a body similar to the final body, however it was smaller and I had to iterate a bit to get the holes to be the correct size and put some guard rails to keep the servos in place. This was my MVP and I was able to plug it in and have all the servos rotate back and forth.
 
+It was suggested that I switch the wheels to stepper motors. I did and had many problems with them. I had them moving many times but I think the issue was that I was never able to supply enough power and/or the XIAO did not have enough sophisticated pins to properly run 2 four-pin stepper motors and a servo. I discarded an arm because there were not enough pins on the XIAO.
 
-</div>
+---
+
+### Issues & How I Fixed Them (with help from Claude)
+
+**1. Output speed range was too wide**  
+The `potToSpeed()` function was originally mapping joystick inputs to a range of -100 to 100, which caused the wheels to spin too fast and made the robot hard to control. I used Claude to update the `map()` calls to output -15 to 15 instead, giving much finer control at lower speeds.
+
+**2. Wrong robot MAC address**  
+ESP-NOW requires the exact MAC address of the receiving device. My code had a placeholder MAC that didn't match the actual robot. Claude helped me reformat the MAC address `58:8C:81:AD:95:50` into the correct C++ byte array syntax: `{0x58, 0x8C, 0x81, 0xAD, 0x95, 0x50}`.
+
+---
+
+I also had trouble finding enough power. My batteries were 9 volt, which was the largest and most powerful i could fit in my housing (after multiple iterations)
+A battery lost power and it was enough of a difference to not power the xiao anymore and only the stepper motors, so then the robot didn't recieve any input from the controller.
+
+The images below should give a good idea of how my process went. The files I used (both the 3d models and the arduino code are attached at the bottom of the page.)
+
 </xmp>
 </body>
 
-<script src="../strapdown.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+<!-- ── Media Gallery ── -->
+<div class="textcontainer" style="max-width:860px; margin:0 auto; padding:1rem;">
 
+  <div style="position:relative; background:#111; border-radius:8px; overflow:hidden;">
+    <div id="media-display" style="width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative;">
+      <div id="media-inner" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div>
+      <div id="media-counter" style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.55); color:#fff; font-size:12px; padding:4px 10px; border-radius:20px;"></div>
+    </div>
+    <button onclick="changeMedia(-1)" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); border:none; color:#fff; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:22px;">&#8249;</button>
+    <button onclick="changeMedia(1)"  style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); border:none; color:#fff; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:22px;">&#8250;</button>
+  </div>
+
+  <div style="padding:0.75rem 1rem; border:1px solid #ddd; border-top:none; border-radius:0 0 8px 8px; background:#fff;">
+    <p id="caption-text" style="margin:0; font-size:14px; color:#555; font-style:italic;"></p>
+  </div>
+
+  <div id="thumb-strip" style="display:flex; gap:6px; margin-top:10px; overflow-x:auto; padding-bottom:4px;"></div>
+</div>
+
+<script>
+// ── EDIT YOUR CAPTIONS HERE ──────────────────────────────────────────
+const mediaDescriptions = {
+  1:  "Add your description for image 1 here.",
+  2:  "Add your description for image 2 here.",
+  3:  "Add your description for image 3 here.",
+  4:  "Add your description for image 4 here.",
+  5:  "Add your description for video 5 here.",
+  6:  "Add your description for video 6 here.",
+  7:  "Add your description for image 7 here.",
+  8:  "Add your description for image 8 here.",
+  9:  "Add your description for image 9 here.",
+  10: "Add your description for video 10 here.",
+  11: "Add your description for image 11 here.",
+  12: "Add your description for image 12 here.",
+  13: "Add your description for image 13 here.",
+  14: "Add your description for image 14 here.",
+  15: "Add your description for image 15 here.",
+  16: "Add your description for image 16 here.",
+  17: "Add your description for image 17 here.",
+  18: "Add your description for image 18 here.",
+  19: "Add your description for image 19 here.",
+  20: "Add your description for image 20 here.",
+  21: "Add your description for image 21 here.",
+  22: "Add your description for image 22 here.",
+  23: "Add your description for video 23 here.",
+  24: "Add your description for video 24 here.",
+  25: "Add your description for image 25 here.",
+  26: "Add your description for image 26 here.",
+  27: "Add your description for image 27 here.",
+  28: "Add your description for image 28 here.",
+  // 29 skipped
+  30: "Add your description for video 30 here.",
+  31: "Add your description for video 31 here.",
+  32: "Add your description for image 32 here.",
+  33: "Add your description for image 33 here.",
+  34: "Add your description for image 34 here.",
+};
+// ────────────────────────────────────────────────────────────────────
+
+const videos  = [5, 6, 10, 23, 24, 30, 31];
+const allNums = [];
+for (let i = 1; i <= 34; i++) { if (i !== 29) allNums.push(i); }
+let current = 0;
+
+function isVideo(n) { return videos.includes(n); }
+
+function renderMedia(idx) {
+  const n     = allNums[idx];
+  const inner = document.getElementById('media-inner');
+  inner.innerHTML = '';
+  if (isVideo(n)) {
+    const v = document.createElement('video');
+    v.src = n + '.mov'; v.controls = true;
+    v.style.cssText = 'max-width:100%; max-height:100%;';
+    inner.appendChild(v);
+  } else {
+    const img = document.createElement('img');
+    img.src = n + '.heic'; img.alt = 'Media ' + n;
+    img.style.cssText = 'max-width:100%; max-height:100%; object-fit:contain;';
+    inner.appendChild(img);
+  }
+  document.getElementById('media-counter').textContent =
+    (idx + 1) + ' / ' + allNums.length + (isVideo(n) ? '  ▶ video' : '');
+  document.getElementById('caption-text').textContent =
+    mediaDescriptions[n] || '';
+  document.querySelectorAll('.thumb').forEach((t, i) => {
+    t.style.outline = i === idx ? '2px solid #333' : 'none';
+    t.style.opacity = i === idx ? '1' : '0.5';
+  });
+}
+
+function changeMedia(dir) {
+  current = (current + dir + allNums.length) % allNums.length;
+  renderMedia(current);
+  document.querySelectorAll('.thumb')[current]
+    ?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+const strip = document.getElementById('thumb-strip');
+allNums.forEach((n, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'thumb';
+  btn.textContent = (isVideo(n) ? '▶ ' : '') + n;
+  btn.style.cssText =
+    'flex-shrink:0; width:48px; height:36px; border:1px solid #ccc; border-radius:4px;' +
+    'background:#f5f5f5; cursor:pointer; font-size:11px; color:#444;';
+  btn.onclick = () => { current = i; renderMedia(i); };
+  strip.appendChild(btn);
+});
+
+renderMedia(0);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  changeMedia(-1);
+  if (e.key === 'ArrowRight') changeMedia(1);
+});
+</script>
+
+<p class="margin">   </p>
+<div class="flexrow">
+  <a id="btn" href="FinalProjectFiles.zip" download>Download Files</a>
+</div>
+<p class="margin">   </p>
+
+<script src="../strapdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </html>
