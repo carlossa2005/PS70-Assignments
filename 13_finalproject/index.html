@@ -71,46 +71,47 @@ The images below should give a good idea of how my process went. The files I use
 <script>
 // ── EDIT YOUR CAPTIONS HERE ──────────────────────────────────────────
 const mediaDescriptions = {
-  1:  "Add your description for image 1 here.",
-  2:  "Add your description for image 2 here.",
-  3:  "Add your description for image 3 here.",
-  4:  "Add your description for image 4 here.",
-  5:  "Add your description for video 5 here.",
-  6:  "Add your description for video 6 here.",
-  7:  "Add your description for image 7 here.",
-  8:  "Add your description for image 8 here.",
-  9:  "Add your description for image 9 here.",
-  10: "Add your description for video 10 here.",
-  11: "Add your description for image 11 here.",
-  12: "Add your description for image 12 here.",
-  13: "Add your description for image 13 here.",
-  14: "Add your description for image 14 here.",
-  15: "Add your description for image 15 here.",
-  16: "Add your description for image 16 here.",
-  17: "Add your description for image 17 here.",
-  18: "Add your description for image 18 here.",
-  19: "Add your description for image 19 here.",
-  20: "Add your description for image 20 here.",
-  21: "Add your description for image 21 here.",
-  22: "Add your description for image 22 here.",
-  23: "Add your description for video 23 here.",
-  24: "Add your description for video 24 here.",
-  25: "Add your description for image 25 here.",
-  26: "Add your description for image 26 here.",
-  27: "Add your description for image 27 here.",
-  28: "Add your description for image 28 here.",
+  1:  "The first arm, desgined to look like a sword - wasn't heavy enough to knock the head off",
+  2:  "Sides of the some of the first bodies, the holes on the right weren't big enough for the servo.",
+  3:  "First body with first lid on top. I later used a smaller magnet",
+  4:  "First body, head, and lid. The head ended up being too big.",
+  5:  "swing works",
+  6:  "All the servo motors working. He has a nice sword swing.",
+  7:  "First wiring for all the stepper motors and the servo.",
+  8:  "The first 3 body iterations",
+  9:  "First wiring for the controller (it stayed on the breadboard)",
+  10:  "The servo and stepper motors recieving the espnow command.",
+  11: "I got the stepper motors stuck inside the body",
+  12: "I felt so guilty",
+  13: "I had no choice",
+  14: "The housing was too small for the innards. This was devastating because I had to remake everything larger.",
+  15: "The new bigger body robot, smaller head.",
+  16: "controller wiring again.",
+  17: "and again",
+  18: "This is the body wiring again (servo and steppers)",
+  19: "and again. I was scared i would mess up the pins and forget where they went",
+  20: "I used this to take in a larger voltage from another source (not the xiao).",
+  21: "1st attempt sodering a little breadboard for the body. This failed because I had too much wire exposed.",
+  22: "I redid it and it was much better and i used tape to cover exposed wire.",
+  23: "Here it is working completely separate from any wires (can be isolated now).",
+  24: "Robot 1 swinging and moving a little bit.",
+  25: "Took a picture of the back so i knew where to soder stuff",
+  26: "and again",
+  27: "picture of the failure again.",
+  28: "SECOND BODY WIRING DONE YAY",
   // 29 skipped
-  30: "Add your description for video 30 here.",
-  31: "Add your description for video 31 here.",
-  32: "Add your description for image 32 here.",
-  33: "Add your description for image 33 here.",
-  34: "Add your description for image 34 here.",
+  30: "Both robots working, though kind of finicky. My batteries are not full power any more and there was no way i was buying more lol.",
+  31: "Got them fighting on their arena. You can see me using the controller in this one. I only have so many hands.",
+  32: "final servo based body vs 3nd to last stepper body.",
+  33: "side view",
+  34: "2nd to last body iteration (too small) but can open down the middle",
+  35: "All iterations of the head",
 };
 // ────────────────────────────────────────────────────────────────────
  
 const videos  = [5, 6, 10, 23, 24, 30, 31];
 const allNums = [];
-for (let i = 1; i <= 34; i++) { if (i !== 29) allNums.push(i); }
+for (let i = 1; i <= 35; i++) { if (i !== 29) allNums.push(i); }
 let current = 0;
  
 function isVideo(n) { return videos.includes(n); }
@@ -126,7 +127,7 @@ function renderMedia(idx) {
     inner.appendChild(v);
   } else {
     const img = document.createElement('img');
-    img.src = n + '.HEIC'; img.alt = 'Media ' + n;
+    img.src = n + '.jpg'; img.alt = 'Media ' + n;
     img.style.cssText = 'max-width:100%; max-height:100%; object-fit:contain;';
     inner.appendChild(img);
   }
